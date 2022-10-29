@@ -11,7 +11,7 @@ public enum BuildButtonState
 public class BuildTowerGui : MonoBehaviour
 {
     [SerializeField] GameObject buildButtons;
-    BuildButtonState stateBuild = BuildButtonState.DISABLED;
+    public BuildButtonState stateBuild = BuildButtonState.DISABLED;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +20,7 @@ public class BuildTowerGui : MonoBehaviour
 
     public IEnumerator SetBuildbuttons(Vector3 worldPos)
     {
-        if (stateBuild == BuildButtonState.TRANSITION) yield break;
+        if (stateBuild == BuildButtonState.DISABLED) yield break;
         stateBuild = BuildButtonState.TRANSITION;
         Vector3 canvasPos = Camera.main.WorldToScreenPoint(worldPos);
         buildButtons.SetActive(true);
@@ -28,5 +28,13 @@ public class BuildTowerGui : MonoBehaviour
         buildButtons.GetComponent<Animator>().SetBool("show", true);
         yield return new WaitForSeconds(0.5f);
         stateBuild = BuildButtonState.ACTIVE;
+    }
+    public IEnumerator DisableBuildButtons()
+    {
+        if (stateBuild != BuildButtonState.ACTIVE) yield break;
+        stateBuild = BuildButtonState.TRANSITION;
+        buildButtons.GetComponent<Animator>().SetBool("show",false);
+        yield return new WaitForSeconds(0.5f);
+      
     }
 }
