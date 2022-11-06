@@ -33,6 +33,10 @@ public abstract class Tower : MonoBehaviour
         towerMesh = GetComponent<MeshFilter>();
         StartCoroutine(BuildTower());
     }
+    private void OnMouseUpAsButton()
+    {
+        if (state == TowerState.DESTROYING) return;
+    }
     protected virtual IEnumerator BuildTower()
     {
         towerMesh.mesh = LevelMesh1[0];
