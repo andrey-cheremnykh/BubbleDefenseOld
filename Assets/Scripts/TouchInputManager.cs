@@ -22,7 +22,7 @@ public class TouchInputManager : MonoBehaviour
             }
             else
             {
-                buildTower.DisableAllButtons();
+                buildTower.DisableButtons();
 
             }
 

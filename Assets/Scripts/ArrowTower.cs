@@ -17,8 +17,14 @@ public class ArrowTower : Tower
         archer = transform.GetChild(0).gameObject;
         currentarrow = GetComponentInChildren<Arrow>();
         arrowSpawnPos = currentarrow.transform.localPosition;
-    } 
-
+        base.Start();
+    }
+    protected override IEnumerator BuildTower()
+    {
+        archer.SetActive(false);
+       yield return  StartCoroutine(base.BuildTower());
+        archer.SetActive(true);
+    }
     // Update is called once per frame
     void Update()
     {

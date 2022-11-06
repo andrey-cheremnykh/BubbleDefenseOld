@@ -19,6 +19,29 @@ public abstract class Tower : MonoBehaviour
     public TowerState state = TowerState.BUILDING;
     public float attackRadius = 20;
     protected List<GameObject> nearbyEnemies;
+    [SerializeField] Mesh[] LevelMesh1;
+    [SerializeField] Mesh[] LevelMesh2;
+    [SerializeField] Mesh[] LevelMesh3;
+    [SerializeField] Mesh[] LevelMesh4A;
+    [SerializeField] Mesh[] LevelMesh4B;
+    float buildTime = 5;
+    MeshFilter towerMesh;
+    ParticleSystem buildVFX;
+    protected void Start()
+    {
+        buildVFX = GetComponent<ParticleSystem>();
+        towerMesh = GetComponent<MeshFilter>();
+        StartCoroutine(BuildTower());
+    }
+    protected virtual IEnumerator BuildTower()
+    {
+        towerMesh.mesh = LevelMesh1[0];
+        buildVFX.Play();
+        yield return new WaitForSeconds(buildTime);
+        towerMesh.mesh = LevelMesh1[1];
+        state = TowerState.LEVEL_1;
+        buildVFX.Stop();
+    }
     List<GameObject> FindEnemiesInRadius()
     {
         List<GameObject> nearbyEnemies = new List<GameObject>();

@@ -11,11 +11,15 @@ public enum BuildButtonState
 public class BuildTowerGui : MonoBehaviour
 {
     [SerializeField] GameObject buildButtons;
+    [SerializeField] GameObject upgradeButtons;
+    [SerializeField] GameObject SliderTowerPrefab;
     public BuildButtonState stateBuild = BuildButtonState.DISABLED;
+    public BuildButtonState stateUpgrade;
     // Start is called before the first frame update
     void Start()
     {
         buildButtons.SetActive(false);
+        upgradeButtons.SetActive(false);
     }
 
     public IEnumerator SetBuildbuttons(Vector3 worldPos)
@@ -24,10 +28,19 @@ public class BuildTowerGui : MonoBehaviour
         stateBuild = BuildButtonState.TRANSITION;
         Vector3 canvasPos = Camera.main.WorldToScreenPoint(worldPos);
         buildButtons.SetActive(true);
-        buildButtons.transform.position = canvasPos;
         buildButtons.GetComponent<Animator>().SetBool("show", true);
         yield return new WaitForSeconds(0.5f);
-        stateBuild = BuildButtonState.ACTIVE;
+    }
+    public IEnumerator SetUpgrateButtons(Vector3 towerPos)
+    {
+        if (stateUpgrade != BuildButtonState.DISABLED) yield break;
+        stateUpgrade = BuildButtonState.TRANSITION;
+        Vector3 canvasPos = Camera.main.WorldToScreenPoint(towerPos);
+        upgradeButtons.SetActive(true);
+        upgradeButtons.transform.position = canvasPos;
+        stateUpgrade = BuildButtonState.ACTIVE;
+        yield return new WaitForSeconds(0.5f);
+        stateUpgrade = BuildButtonState.ACTIVE;
     }
     public IEnumerator DisableBuildButtons()
     {
@@ -35,6 +48,20 @@ public class BuildTowerGui : MonoBehaviour
         stateBuild = BuildButtonState.TRANSITION;
         buildButtons.GetComponent<Animator>().SetBool("show",false);
         yield return new WaitForSeconds(0.5f);
-      
+        buildButtons.SetActive(false);
+        stateBuild = BuildButtonState.DISABLED;
+    }public IEnumerator DisableUpgradeButtons()
+    {
+        if (stateUpgrade != BuildButtonState.ACTIVE) yield break;
+        stateUpgrade = BuildButtonState.TRANSITION;
+        upgradeButtons.GetComponent<Animator>().SetBool("show",false);
+        yield return new WaitForSeconds(0.5f);
+        upgradeButtons.SetActive(false);
+        stateUpgrade = BuildButtonState.DISABLED;
+    }
+    public void CreateTowerSlider(Transform tower)
+    {
+        GameObject cloneSlider = Instantiate(SliderTowerPrefab, transform);
+        cloneSlider.GetComponent<SliderForTower>().SetTower(tower);
     }
 }
