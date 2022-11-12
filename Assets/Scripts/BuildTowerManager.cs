@@ -83,5 +83,5 @@ public class BuildTowerManager : MonoBehaviour
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
         DisableButtons();
-    }
+    } 
 }

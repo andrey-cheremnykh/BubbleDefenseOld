@@ -15,6 +15,7 @@ public enum TowerState
 
 public abstract class Tower : MonoBehaviour
 {
+    Waypoint builtway;
     EnemyHealth enemy;
     public TowerState state = TowerState.BUILDING;
     public float attackRadius = 20;
@@ -25,7 +26,7 @@ public abstract class Tower : MonoBehaviour
     [SerializeField] Mesh[] LevelMesh4A;
     [SerializeField] Mesh[] LevelMesh4B;
     float buildTime = 5;
-    MeshFilter towerMesh;
+    MeshFilter towerMesh; 
     ParticleSystem buildVFX;
     protected void Start()
     {
@@ -86,5 +87,17 @@ public abstract class Tower : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
 
+    }
+    public virtual IEnumerator DestroyTower()
+    {
+        buildVFX.Play();
+        state = TowerState.DESTROYING;
+        if (state == TowerState.LEVEL_1) towerMesh.mesh = LevelMesh1[0];
+        if (state == TowerState.LEVEL_2) towerMesh.mesh = LevelMesh1[0];
+        if (state == TowerState.LEVEL_3) towerMesh.mesh = LevelMesh1[0];
+        if (state == TowerState.LEVEL_4A) towerMesh.mesh = LevelMesh1[0];
+        yield return new WaitForSeconds(5);
+        builtway.buildState = BuildState.EMPTY;
+        Destroy(gameObject); 
     }
 }

@@ -25,6 +25,11 @@ public class ArrowTower : Tower
        yield return  StartCoroutine(base.BuildTower());
         archer.SetActive(true);
     }
+    public override IEnumerator DestroyTower()
+    {
+        archer.SetActive(false);
+        yield return StartCoroutine(base.DestroyTower());
+    }
     // Update is called once per frame
     void Update()
     {

@@ -19,6 +19,10 @@ public class UpgradeTowerManager : MonoBehaviour
         selectedTower = newSelected;
         StartCoroutine(towerGui.SetUpgrateButtons(selectedTower.transform.position));
     }
+    public void UpgradeSelectedTower()
+    {
+        StartCoroutine(selectedTower.DestroyTower());
+    }
     public void DisableButtons()
     {
         StartCoroutine(towerGui.DisableUpgradeButtons());
