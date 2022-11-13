@@ -1,32 +1,55 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradeTowerManager : MonoBehaviour
 {
+
     Tower selectedTower;
-    BuildTowerGui towerGui;TowerState state;
+    BuildTowerGUI towerGUI;
+
     // Start is called before the first frame update
     void Start()
     {
-        towerGui = FindObjectOfType<BuildTowerGui>();  
+        towerGUI = FindObjectOfType<BuildTowerGUI>();
     }
-    
 
     public void SelectTower(Tower newSelected)
     {
-        if (towerGui.stateUpgrade == BuildButtonState.TRANSITION) return;
+        if (towerGUI.stateUpgrades != ButtonState.DISABLED) return;
         selectedTower = newSelected;
-        StartCoroutine(towerGui.SetUpgrateButtons(selectedTower.transform.position));
+        StartCoroutine(towerGUI.SetUpgradeButtons(selectedTower.transform.position, selectedTower.state));
+
     }
+
     public void UpgradeSelectedTower()
     {
-        StartCoroutine(selectedTower.DestroyTower());
+        selectedTower.UpgradeTower();
+        DisableAllButtons();
     }
-    public void DisableButtons()
+
+    public void UpgradeSelectedTowerToLevel4A()
     {
-        StartCoroutine(towerGui.DisableUpgradeButtons());
-
-
+        StartCoroutine( selectedTower.UpgradeToLevel4A());
+        DisableAllButtons();
     }
+
+    public void UpgradeSelectedTowerToLevel4B()
+    {
+        StartCoroutine(selectedTower.UpgradeToLevel4B());
+        DisableAllButtons();
+    }
+
+    public void DestroySelectedTower()
+    {
+        StartCoroutine(selectedTower.DestroyTower());
+        DisableAllButtons();
+    }
+
+    public void DisableAllButtons()
+    {
+        StartCoroutine(towerGUI.DisableUpgradeButtons());
+    }
+
+    
 }

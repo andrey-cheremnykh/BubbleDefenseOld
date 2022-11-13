@@ -21,7 +21,7 @@ public class TouchInputManager : MonoBehaviour
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 buildTower.DisableButtons();
-                upgradeTower.DisableButtons();
+                upgradeTower.DisableAllButtons();
                     
             }
             else

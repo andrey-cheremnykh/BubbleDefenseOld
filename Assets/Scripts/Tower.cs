@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,91 +13,171 @@ public enum TowerState
     LEVEL_4B
 }
 
-public abstract class Tower : MonoBehaviour
+public class Tower : MonoBehaviour
 {
-    Waypoint builtway;
-    EnemyHealth enemy;
     public TowerState state = TowerState.BUILDING;
+    Waypoint builtWaypoint;
+
     public float attackRadius = 20;
-    protected List<GameObject> nearbyEnemies;
-    [SerializeField] Mesh[] LevelMesh1;
-    [SerializeField] Mesh[] LevelMesh2;
-    [SerializeField] Mesh[] LevelMesh3;
-    [SerializeField] Mesh[] LevelMesh4A;
-    [SerializeField] Mesh[] LevelMesh4B;
-    float buildTime = 5;
-    MeshFilter towerMesh; 
-    ParticleSystem buildVFX;
-    protected void Start()
+
+    protected float buildTime = 5;
+
+    [SerializeField] protected Mesh[] levelMesh1;
+    [SerializeField] protected Mesh[] levelMesh2;
+    [SerializeField] protected Mesh[] levelMesh3;
+    [SerializeField] protected Mesh[] levelMesh4A;
+    [SerializeField] protected Mesh[] levelMesh4B;
+
+    protected MeshFilter towerMesh;
+    ParticleSystem buildingVFX;
+
+    public void Start()
     {
-        buildVFX = GetComponent<ParticleSystem>();
+        buildingVFX = GetComponentInChildren<ParticleSystem>();
         towerMesh = GetComponent<MeshFilter>();
         StartCoroutine(BuildTower());
     }
-    private void OnMouseUpAsButton()
+
+    virtual protected IEnumerator BuildTower()
     {
-        if (state == TowerState.DESTROYING) return;
-    }
-    protected virtual IEnumerator BuildTower()
-    {
-        towerMesh.mesh = LevelMesh1[0];
-        buildVFX.Play();
+        buildingVFX.Play();
+        towerMesh.mesh = levelMesh1[0];
         yield return new WaitForSeconds(buildTime);
-        towerMesh.mesh = LevelMesh1[1];
+        towerMesh.mesh = levelMesh1[1];
         state = TowerState.LEVEL_1;
-        buildVFX.Stop();
+        buildingVFX.Stop();
     }
+
+
+    public void SetBuildWaypoint(Waypoint w)
+    {
+        builtWaypoint = w;
+    }
+
     List<GameObject> FindEnemiesInRadius()
     {
-        List<GameObject> nearbyEnemies = new List<GameObject>();
+        List<GameObject> nearEnemies = new List<GameObject>();
         Enemy[] enemies = FindObjectsOfType<Enemy>();
+
         for (int i = 0; i < enemies.Length; i++)
         {
-            float dist = Vector3.Distance(transform.position, enemies[i].transform.position);
-            if(dist < attackRadius)
+            float distance = Vector3.Distance(transform.position, enemies[i].transform.position);
+            if(distance < attackRadius)
             {
-                nearbyEnemies.Add(enemies[i].gameObject);
+                nearEnemies.Add(enemies[i].gameObject);
             }
         }
-        return nearbyEnemies;
+        return nearEnemies;
     }
+
     public GameObject FindEnemyToShoot()
     {
-        List<GameObject> enemylist = FindEnemiesInRadius();
-        if (enemylist.Count == 0) return null;
+        List<GameObject> enemiesList = FindEnemiesInRadius();
+        if (enemiesList.Count == 0) return null;
         GameObject mainEnemy = null;
-        float maxDist = 0;
-        for (int i = 0; i < enemylist.Count; i++)
+        float maxDistance = 0;
+
+        for (int i = 0; i < enemiesList.Count; i++)
         {
-            Enemy en = enemylist[i].GetComponent<Enemy>();
-            if (enemylist[i].GetComponent<EnemyHealth>().isAlive == false)
+            Enemy en = enemiesList[i].GetComponent<Enemy>();
+            if (enemiesList[i].GetComponent<EnemyHealth>().isAlive == true)
             {
-                continue;
-            }
-            if (maxDist < en.GetPassedDist())
-            {
-                maxDist = en.GetPassedDist();
-                mainEnemy = enemylist[i]; 
+                if (maxDistance < en.GetPassedDist())
+                {
+                    maxDistance = en.GetPassedDist();
+                    mainEnemy = enemiesList[i];
+                }
             }
         }
         return mainEnemy;
     }
+
+
+    private void OnMouseUpAsButton()
+    {
+        if (state == TowerState.BUILDING || state == TowerState.DESTROYING) return;
+
+        UpgradeTowerManager upgradeTower = FindObjectOfType<UpgradeTowerManager>();
+        upgradeTower.SelectTower(this);
+    }
+
+    public void UpgradeTower()
+    {
+        if(state == TowerState.LEVEL_1)
+        {
+            StartCoroutine(UpgradeToLevel2());
+        }
+        else if(state == TowerState.LEVEL_2)
+        {
+            StartCoroutine(UpgradeToLevel3());
+        }
+     
+    }
+
+    public virtual IEnumerator UpgradeToLevel2()
+    {
+        state = TowerState.BUILDING;
+        buildingVFX.Play();
+        towerMesh.mesh = levelMesh2[0];
+        yield return new WaitForSeconds(buildTime);
+        towerMesh.mesh = levelMesh2[1];
+        state = TowerState.LEVEL_2;
+        buildingVFX.Stop();
+    }
+
+    public virtual IEnumerator UpgradeToLevel3()
+    {
+        state = TowerState.BUILDING;
+        buildingVFX.Play();
+        towerMesh.mesh = levelMesh3[0];
+        yield return new WaitForSeconds(buildTime);
+        towerMesh.mesh = levelMesh3[1];
+        state = TowerState.LEVEL_3;
+        buildingVFX.Stop();
+    }
+
+    public virtual IEnumerator UpgradeToLevel4A()
+    {
+        state = TowerState.BUILDING;
+        buildingVFX.Play();
+        towerMesh.mesh = levelMesh4A[0];
+        yield return new WaitForSeconds(buildTime);
+        towerMesh.mesh = levelMesh4A[1];
+        state = TowerState.LEVEL_4A;
+        buildingVFX.Stop();
+    }
+
+    public virtual IEnumerator UpgradeToLevel4B()
+    {
+        state = TowerState.BUILDING;
+        buildingVFX.Play();
+        towerMesh.mesh = levelMesh4B[0];
+        yield return new WaitForSeconds(buildTime);
+        towerMesh.mesh = levelMesh4B[1];
+        state = TowerState.LEVEL_4B;
+        buildingVFX.Stop();
+    }
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
-
     }
+
     public virtual IEnumerator DestroyTower()
     {
-        buildVFX.Play();
+        buildingVFX.Play();
+        
+        if (state == TowerState.LEVEL_1) towerMesh.mesh = levelMesh1[0];
+        if (state == TowerState.LEVEL_2) towerMesh.mesh = levelMesh2[0];
+        if (state == TowerState.LEVEL_3) towerMesh.mesh = levelMesh3[0];
+        if (state == TowerState.LEVEL_4A) towerMesh.mesh = levelMesh4A[0];
+        if (state == TowerState.LEVEL_4B) towerMesh.mesh = levelMesh4B[0];
         state = TowerState.DESTROYING;
-        if (state == TowerState.LEVEL_1) towerMesh.mesh = LevelMesh1[0];
-        if (state == TowerState.LEVEL_2) towerMesh.mesh = LevelMesh1[0];
-        if (state == TowerState.LEVEL_3) towerMesh.mesh = LevelMesh1[0];
-        if (state == TowerState.LEVEL_4A) towerMesh.mesh = LevelMesh1[0];
         yield return new WaitForSeconds(5);
-        builtway.buildState = BuildState.EMPTY;
-        Destroy(gameObject); 
+        builtWaypoint.buildState = BuildState.EMPTY;
+        Destroy(gameObject);
     }
+
 }

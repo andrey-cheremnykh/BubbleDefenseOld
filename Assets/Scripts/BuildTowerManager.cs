@@ -7,12 +7,12 @@ public class BuildTowerManager : MonoBehaviour
     [SerializeField] GameObject ArcherTowerPrefab;
     [SerializeField] GameObject CannonTowerPrefab;
     [SerializeField] GameObject MagicTowerPrefab;
-    BuildTowerGui towerGui;
+    BuildTowerGUI towerGui;
     Waypoint lastPressedPoint;
     GameObject selectVFX;
     private void Start()
     {
-        towerGui = FindObjectOfType<BuildTowerGui>();
+        towerGui = FindObjectOfType<BuildTowerGUI>();
         selectVFX = GetComponentInChildren<ParticleSystem>().gameObject;
         selectVFX.SetActive(false);
     }
@@ -22,14 +22,14 @@ public class BuildTowerManager : MonoBehaviour
         bool isBuildable = CheckBuildable(waypoint);
         if (isBuildable == false) return;
         Vector3 buildPoint = waypoint.transform.position + new Vector3(0, 6, 0);
-        StartCoroutine(towerGui.SetBuildbuttons(buildPoint));
+        StartCoroutine(towerGui.SetBuildButtons(buildPoint));
         GameObject newTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
 
         waypoint.buildState = BuildState.TOWER_BUILT;
     }
     public void DisableButtons()
     {
-        if (towerGui.stateBuild != BuildButtonState.ACTIVE) return;
+        if (towerGui.stateBuild != ButtonState.ACTIVE) return;
         StartCoroutine(towerGui.DisableBuildButtons());
         selectVFX.SetActive(false);
     }
@@ -38,12 +38,12 @@ public class BuildTowerManager : MonoBehaviour
         Vector3 offset = new(0,0.05f,0);
         bool isBuildable = CheckBuildable(way);
             if (isBuildable == false) return;
-        if (towerGui.stateBuild != BuildButtonState.DISABLED) return;
+        if (towerGui.stateBuild != ButtonState.DISABLED) return;
         lastPressedPoint = way;
         Vector3 buildPoint = way.transform.position;
         selectVFX.SetActive(true);
         selectVFX.transform.position = buildPoint + offset;
-        StartCoroutine(towerGui.SetBuildbuttons(buildPoint)); 
+        StartCoroutine(towerGui.SetBuildButtons(buildPoint)); 
 
 
     }
@@ -59,7 +59,7 @@ public class BuildTowerManager : MonoBehaviour
     }
     public void SpawnArcherTower()
     {
-        if (towerGui.stateBuild == BuildButtonState.ACTIVE) return;
+        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
@@ -69,7 +69,7 @@ public class BuildTowerManager : MonoBehaviour
     }
     public void SpawnCannonTower()
     {
-           if (towerGui.stateBuild == BuildButtonState.ACTIVE) return;
+           if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(CannonTowerPrefab, buildPoint, Quaternion.identity);
@@ -77,7 +77,7 @@ public class BuildTowerManager : MonoBehaviour
         DisableButtons();
     }public void SpawnMagicTower()
     {
-        if (towerGui.stateBuild == BuildButtonState.ACTIVE) return;
+        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
