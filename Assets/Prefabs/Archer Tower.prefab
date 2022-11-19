@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 844574030645015917}
   - component: {fileID: 846817352409019875}
   - component: {fileID: 856797379123634769}
+  - component: {fileID: 8430660029920262044}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Untagged
@@ -167,6 +168,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8430660029920262044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843062420894179131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d33a70d5dcd5784ab5153fda91313c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &843276347031940823
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,21 +445,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   attackRadius: 20
-  LevelMesh1:
-  - {fileID: 4300000, guid: ab4553bb4283e7840b83257b120cab3d, type: 3}
-  - {fileID: 4300000, guid: dd09034417ae03142bd6a821cf15f334, type: 3}
-  LevelMesh2:
-  - {fileID: 4300000, guid: 02c5c88f348e9ec40bc9f75b4607bd6c, type: 3}
-  - {fileID: 4300000, guid: 994adfa9dfe55f249a376f7cd9cdaa6c, type: 3}
-  LevelMesh3:
-  - {fileID: 4300000, guid: 9f6f07a475fa44345b665fc56302aa27, type: 3}
-  - {fileID: 4300000, guid: bc4bf5978b0527b488b736a0812f1a0d, type: 3}
-  LevelMesh4A:
-  - {fileID: 4300000, guid: 64b0502d91761814b93e8a024126bc0e, type: 3}
-  - {fileID: 4300000, guid: 28f528ecfe682dc45aad11043b368dfa, type: 3}
-  LevelMesh4B:
-  - {fileID: 4300000, guid: 55e7e671a36fffb48b4218ed49b70d0b, type: 3}
-  - {fileID: 4300000, guid: 00508f8ccaa61a54890e091bece3fbf0, type: 3}
+  levelMesh1: []
+  levelMesh2: []
+  levelMesh3: []
+  levelMesh4A: []
+  levelMesh4B: []
 --- !u!1 &7946392299575244514
 GameObject:
   m_ObjectHideFlags: 0

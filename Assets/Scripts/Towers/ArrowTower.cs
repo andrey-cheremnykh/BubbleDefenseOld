@@ -6,17 +6,16 @@ public class ArrowTower : Tower
 {
     GameObject archer;
     GameObject enemy;
+    GameObject arrowPrefab;
     bool isReloaded = true;
     Arrow currentarrow;
     Vector3 arrowSpawnPos;
-    GameObject arrowPrefab;
+    float firerate = 1;
+    float damagearrow = 10;
         
     // Start is called before the first frame update
     void Start()
     {
-        archer = transform.GetChild(0).gameObject;
-        currentarrow = GetComponentInChildren<Arrow>();
-        arrowSpawnPos = currentarrow.transform.localPosition;
         base.Start();
     }
     protected override IEnumerator BuildTower()
@@ -46,13 +45,8 @@ public class ArrowTower : Tower
     {
 
         isReloaded = false;
-        currentarrow.Launch(enemy, 10);
-        yield return new WaitForSeconds(1);
-        GameObject clone = Instantiate(arrowPrefab);
-        clone.transform.parent = transform.GetChild(0);
-        clone.transform.localPosition = arrowSpawnPos;
-        clone.transform.localRotation = Quaternion.Euler(0,0,0);
-        currentarrow = clone.GetComponent<Arrow>(); 
+        ArcherOnTower archerScript = GetComponent<ArcherOnTower>();
+        yield return StartCoroutine(archerScript.Shoot(enemy,damagearrow,firerate,arrowPrefab));
         isReloaded = true;
     }
   

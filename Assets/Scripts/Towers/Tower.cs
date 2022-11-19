@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum TowerState
 {
@@ -95,6 +96,8 @@ public class Tower : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (state == TowerState.BUILDING || state == TowerState.DESTROYING) return;
 
         UpgradeTowerManager upgradeTower = FindObjectOfType<UpgradeTowerManager>();

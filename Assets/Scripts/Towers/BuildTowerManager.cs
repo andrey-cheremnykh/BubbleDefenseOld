@@ -10,11 +10,14 @@ public class BuildTowerManager : MonoBehaviour
     BuildTowerGUI towerGui;
     Waypoint lastPressedPoint;
     GameObject selectVFX;
+    EnemySpawner enemySpawner;
     private void Start()
     {
+        enemySpawner = FindObjectOfType<EnemySpawner>();
         towerGui = FindObjectOfType<BuildTowerGUI>();
         selectVFX = GetComponentInChildren<ParticleSystem>().gameObject;
         selectVFX.SetActive(false);
+        enemySpawner.onNewWave += DisableButtons;
     }
 
     public void BuildTower(Waypoint waypoint)
@@ -39,6 +42,7 @@ public class BuildTowerManager : MonoBehaviour
         bool isBuildable = CheckBuildable(way);
             if (isBuildable == false) return;
         if (towerGui.stateBuild != ButtonState.DISABLED) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
         lastPressedPoint = way;
         Vector3 buildPoint = way.transform.position;
         selectVFX.SetActive(true);
@@ -52,6 +56,7 @@ public class BuildTowerManager : MonoBehaviour
     {
         if (waypoint.buildState != BuildState.EMPTY) return false;
 
+
         Pathfinder p = FindObjectOfType<Pathfinder>();
         bool isPathFound = p.CheckPath(waypoint);
 
@@ -61,6 +66,8 @@ public class BuildTowerManager : MonoBehaviour
     {
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
@@ -71,6 +78,8 @@ public class BuildTowerManager : MonoBehaviour
     {
            if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(CannonTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
@@ -79,6 +88,8 @@ public class BuildTowerManager : MonoBehaviour
     {
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;

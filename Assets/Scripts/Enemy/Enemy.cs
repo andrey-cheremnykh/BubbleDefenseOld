@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         health = GetComponent<EnemyHealth>();
-    }
+    } 
 
     // Update is called once per frame
     void Update()

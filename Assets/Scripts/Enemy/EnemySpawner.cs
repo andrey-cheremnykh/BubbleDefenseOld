@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 using TMPro;
 
@@ -19,25 +20,22 @@ public class EnemySpawner : MonoBehaviour
 
     Pathfinder pathfinder;
     WaveSpawnBar spawnBar;
-
+    int buildTime = 10;
     float timer = 0;
     public SpawnState state = SpawnState.NON_SPAWNING;
+    public event Action onNewWave;
 
     // Start is called before the first frame update
     void Start()
     {
         pathfinder = FindObjectOfType<Pathfinder>();
+        spawnBar = FindObjectOfType<WaveSpawnBar>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(SpawnNewWave());
-        }
-
-        if (waveCount > 0 && state == SpawnState.NON_SPAWNING)
+         if (waveCount > 0 && state == SpawnState.NON_SPAWNING)
         {
             timer += Time.deltaTime;
 
@@ -53,6 +51,7 @@ public class EnemySpawner : MonoBehaviour
 
     public IEnumerator SpawnNewWave()
     {
+        if(onNewWave != null) onNewWave();
         if (state != SpawnState.NON_SPAWNING) yield break;
         timer = 0;
         state = SpawnState.SPAWNING;
@@ -63,6 +62,8 @@ public class EnemySpawner : MonoBehaviour
         List<Waypoint> path = pathfinder.FindPath();
         Waypoint spawnPoint = GetComponentInChildren<Waypoint>();
         path.Insert(0, spawnPoint);
+        float waveSpawnDuration =( enemiesCount - 1) * timeBetween;
+        spawnBar.SetWaveFill(waveSpawnDuration, waveCount + 1  );
 
         for (int i = 0; i < enemiesCount; i++)
         {
@@ -96,9 +97,14 @@ public class EnemySpawner : MonoBehaviour
         }
         else
         {
-            state -= SpawnState.SPAWNING;
+            state = SpawnState.SPAWNING;
+            spawnBar.StartBuildTime(buildTime);
+
         }
     }
 
-
+    public void OnWaveButtonPressed() 
+    {
+        StartCoroutine(SpawnNewWave());
+    }
 }
