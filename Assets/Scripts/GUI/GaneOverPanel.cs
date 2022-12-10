@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GaneOverPanel : MonoBehaviour
 {
+    [SerializeField] GameObject losePanel
     // Start is called before the first frame update
     void Start()
     {
