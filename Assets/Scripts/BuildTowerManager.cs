@@ -7,13 +7,18 @@ public class BuildTowerManager : MonoBehaviour
     [SerializeField] GameObject ArcherTowerPrefab;
     [SerializeField] GameObject CannonTowerPrefab;
     [SerializeField] GameObject MagicTowerPrefab;
+
     BuildTowerGUI towerGui;
     Waypoint lastPressedPoint;
     GameObject selectVFX;
+    EnemySpawner enemySpawner;
+    MoneyManager mm;
     private void Start()
     {
         towerGui = FindObjectOfType<BuildTowerGUI>();
         selectVFX = GetComponentInChildren<ParticleSystem>().gameObject;
+        mm = FindObjectOfType<MoneyManager>();
+
         selectVFX.SetActive(false);
     }
 
@@ -61,6 +66,9 @@ public class BuildTowerManager : MonoBehaviour
     {
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+        if (mm.SpendMoney(PricesForTowers.ARROW_1) == false) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
@@ -69,8 +77,11 @@ public class BuildTowerManager : MonoBehaviour
     }
     public void SpawnCannonTower()
     {
-           if (towerGui.stateBuild == ButtonState.ACTIVE) return;
+        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+        if (mm.SpendMoney(PricesForTowers.CANNON_1) == false) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(CannonTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
@@ -79,6 +90,9 @@ public class BuildTowerManager : MonoBehaviour
     {
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
+        if (mm.SpendMoney(PricesForTowers.MAGIC_1) == false) return;
+
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;

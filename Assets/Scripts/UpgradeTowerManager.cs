@@ -18,13 +18,14 @@ public class UpgradeTowerManager : MonoBehaviour
     {
         if (towerGUI.stateUpgrades != ButtonState.DISABLED) return;
         selectedTower = newSelected;
-        StartCoroutine(towerGUI.SetUpgradeButtons(selectedTower.transform.position, selectedTower.state));
+        StartCoroutine(towerGUI. SetUpgradeButtons(selectedTower));
 
     }
 
     public void UpgradeSelectedTower()
     {
-        selectedTower.UpgradeTower();
+        if (selectedTower.state == TowerState.LEVEL_1) StartCoroutine(selectedTower.UpgradeToLevel2());
+       else if (selectedTower.state == TowerState.LEVEL_2) StartCoroutine(selectedTower.UpgradeToLevel3());
         DisableAllButtons();
     }
 

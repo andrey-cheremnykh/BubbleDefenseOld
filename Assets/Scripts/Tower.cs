@@ -54,7 +54,7 @@ public class Tower : MonoBehaviour
         builtWaypoint = w;
     }
 
-    List<GameObject> FindEnemiesInRadius()
+   public  List<GameObject> FindEnemiesInRadius()
     {
         List<GameObject> nearEnemies = new List<GameObject>();
         Enemy[] enemies = FindObjectsOfType<Enemy>();
@@ -100,23 +100,9 @@ public class Tower : MonoBehaviour
         UpgradeTowerManager upgradeTower = FindObjectOfType<UpgradeTowerManager>();
         upgradeTower.SelectTower(this);
     }
-
-    public void UpgradeTower()
-    {
-        if(state == TowerState.LEVEL_1)
-        {
-            StartCoroutine(UpgradeToLevel2());
-        }
-        else if(state == TowerState.LEVEL_2)
-        {
-            StartCoroutine(UpgradeToLevel3());
-        }
-     
-    }
-
     public virtual IEnumerator UpgradeToLevel2()
     {
-        state = TowerState.BUILDING;
+        state = TowerState.BUILDING; 
         buildingVFX.Play();
         towerMesh.mesh = levelMesh2[0];
         yield return new WaitForSeconds(buildTime);

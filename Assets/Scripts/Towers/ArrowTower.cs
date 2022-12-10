@@ -7,19 +7,10 @@ public class ArrowTower : Tower
     [SerializeField] GameObject[] archers;
 
     GameObject enemy;
+    GameObject arrowPrefab;
     bool isReloaded = true;
     Arrow currentarrow;
     Vector3 arrowSpawnPos;
-<<<<<<< Updated upstream:Assets/Scripts/ArrowTower.cs
-    GameObject arrowPrefab;
-        
-    // Start is called before the first frame update
-    void Start()
-    {
-        archer = transform.GetChild(0).gameObject;
-        currentarrow = GetComponentInChildren<Arrow>();
-        arrowSpawnPos = currentarrow.transform.localPosition;
-=======
     float firerate = 1;
     float damagearrow = 10;
     ParticleSystem buildingVFX;
@@ -30,7 +21,6 @@ public class ArrowTower : Tower
     {
         archers[0].SetActive(false);
         archers[1].SetActive(false);
->>>>>>> Stashed changes:Assets/Scripts/Towers/ArrowTower.cs
         base.Start();
     }
     protected override IEnumerator BuildTower()
@@ -74,15 +64,6 @@ public class ArrowTower : Tower
     {
 
         isReloaded = false;
-<<<<<<< Updated upstream:Assets/Scripts/ArrowTower.cs
-        currentarrow.Launch(enemy, 10);
-        yield return new WaitForSeconds(1);
-        GameObject clone = Instantiate(arrowPrefab);
-        clone.transform.parent = transform.GetChild(0);
-        clone.transform.localPosition = arrowSpawnPos;
-        clone.transform.localRotation = Quaternion.Euler(0,0,0);
-        currentarrow = clone.GetComponent<Arrow>(); 
-=======
         ArcherOnTower archerScript = archers[0].GetComponent<ArcherOnTower>();
         yield return StartCoroutine(archerScript.Shoot(enemy,damagearrow,firerate,arrowPrefab));
         if(archers[1].activeInHierarchy == true)
@@ -90,7 +71,6 @@ public class ArrowTower : Tower
         ArcherOnTower archerScript2 = archers[1].GetComponent<ArcherOnTower>();
             yield return StartCoroutine(archerScript2.Shoot(enemy, damagearrow, firerate, arrowPrefab));
         }
->>>>>>> Stashed changes:Assets/Scripts/Towers/ArrowTower.cs
         isReloaded = true;
     }
     public override IEnumerator UpgradeToLevel4B()

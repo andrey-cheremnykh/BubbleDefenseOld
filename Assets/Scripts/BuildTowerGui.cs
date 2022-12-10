@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -54,31 +55,77 @@ public class BuildTowerGUI : MonoBehaviour
         stateBuild = ButtonState.DISABLED;
     }
 
-    public IEnumerator SetUpgradeButtons(Vector3 towerPos, TowerState state)
+    public IEnumerator SetUpgradeButtons(Tower tower)
     {
         if (stateUpgrades != ButtonState.DISABLED) yield break;
         stateUpgrades = ButtonState.TRANSITION;
-        Vector3 canvasPos = Camera.main.WorldToScreenPoint(towerPos);
-        if (state == TowerState.LEVEL_3)
+        Vector3 canvasPos = Camera.main.WorldToScreenPoint(tower.transform.position);
+        if (tower.state == TowerState.LEVEL_3)
         {
             upgradeButtonsAdvanced.SetActive(true);
             upgradeButtonsAdvanced.transform.position = canvasPos;
             upgradeButtonsAdvanced.GetComponent<Animator>().SetBool("show", true);
+            if (tower is ArrowTower)
+                SetLevel4PricesArcher();
         }
         else
         {
-            upgradeButtonsBasic.SetActive(true);
-            if (state == TowerState.LEVEL_4A || state == TowerState.LEVEL_4B)
-                upgradeButtonsBasic.transform.GetChild(0).gameObject.SetActive(false);
-            else
-                upgradeButtonsBasic.transform.GetChild(0).gameObject.SetActive(true);
-            upgradeButtonsBasic.transform.position = canvasPos;
+            ShowSellButton(canvasPos , tower);
             upgradeButtonsBasic.GetComponent<Animator>().SetBool("show", true);
+        }
+        if (tower is ArrowTower)
+        {
+            SetArrowPrice(tower.state);
         }
         yield return new WaitForSeconds(0.5f);
         stateUpgrades = ButtonState.ACTIVE;
     }
-    
+
+    void SetLevel4PricesArcher()
+    {
+        int priceUpgrade4A = PricesForTowers.ARROW_4A;
+        int priceUpgrade4B = PricesForTowers.ARROW_4B;
+        int salePrice = (int)(PricesForTowers.ARROW_3 * 0.8f);
+        upgradeButtonsAdvanced.GetComponent<UpgradeBUttons>().SetPrices(priceUpgrade4A,priceUpgrade4B,salePrice);
+    }
+
+    void ShowSellButton(Vector3 canvasPos, Tower tower)
+        {
+            upgradeButtonsBasic.SetActive(true);
+            upgradeButtonsBasic.transform.GetChild(0).gameObject.SetActive(false);
+        upgradeButtonsBasic.transform.position = canvasPos;
+        upgradeButtonsBasic.GetComponent<Animator>().SetBool("show", true);
+        if (tower is ArrowTower)
+        {
+            SetPriceForSaleArrow(tower.state);
+        }
+
+        }
+    void SetPriceForSaleArrow(TowerState state)
+    {
+        int sellPrice = 0;
+        if(state == TowerState.LEVEL_4A) sellPrice = (int)(PricesForTowers.ARROW_4A * 0.8f);
+        if(state == TowerState.LEVEL_4A) sellPrice = (int)(PricesForTowers.ARROW_4B * 0.8f);
+        upgradeButtonsBasic.GetComponent<UpgradeBUttons>().SetPrices(sellPrice);
+
+    }
+    void SetArrowPrice(TowerState state)
+    {
+
+        int priceForUpgrades = 0;
+        int priceForSale = 0;
+        if (state == TowerState.LEVEL_1)
+        {
+            priceForUpgrades = PricesForTowers.ARROW_2;
+            priceForSale = (int)(PricesForTowers.ARROW_1 * 0.8f);
+        }
+        else if (state == TowerState.LEVEL_2)
+        {
+            priceForUpgrades = PricesForTowers.ARROW_3;
+            priceForSale =(int)(PricesForTowers.ARROW_2 * 0.8f) ;
+        }
+        upgradeButtonsBasic.GetComponent<UpgradeBUttons>().SetPrices(priceForUpgrades, priceForSale);
+    } 
     public IEnumerator DisableUpgradeButtons()
     {
         if (stateUpgrades != ButtonState.ACTIVE) yield break;
