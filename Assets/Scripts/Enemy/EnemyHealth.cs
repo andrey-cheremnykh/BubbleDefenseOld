@@ -23,6 +23,6 @@ public class EnemyHealth : MonoBehaviour
     {
         GetComponent<Animator>().SetTrigger("die");
         Destroy(gameObject, 2.5f);
-        onDeath();
+        if (onDeath != null) onDeath();                 
     }
 }

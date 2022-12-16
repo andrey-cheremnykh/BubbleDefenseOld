@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class UpgradeBUttons : MonoBehaviour
+public class UpgradeButtons : MonoBehaviour
 {
     [SerializeField] TMP_Text upgradeText; 
     [SerializeField] TMP_Text deleteText; 

@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public enum SpawnState
 {
@@ -22,7 +21,11 @@ public class EnemySpawner : MonoBehaviour
 
     float timer = 0;
     public SpawnState state = SpawnState.NON_SPAWNING;
-
+    public event Action onWin;
+    public int GetWaveCount()
+    {
+        return waveCount;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -92,7 +95,7 @@ public class EnemySpawner : MonoBehaviour
         if(waveCount == waves.Length)
         {
             state = SpawnState.WIN;
-            
+            if(onWin != null ) onWin();
         }
         else
         {

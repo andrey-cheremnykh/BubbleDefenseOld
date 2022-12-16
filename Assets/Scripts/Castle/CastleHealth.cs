@@ -6,14 +6,18 @@ using System;
 public class CastleHealth : MonoBehaviour
 {
     AttackPoint[] attackPoints;
+    float maxHealth = 100;
     float health = 100;
     bool isAlive = true;
     public event Action<float> onDamage;
+    public event Action onDestroy;
      // Start is called before the first frame update
     void Start()
     {
         attackPoints = GetComponentsInChildren<AttackPoint>();
+        health = maxHealth;
         if (onDamage != null) onDamage(health / 100);
+        onDestroy += CastleDestroy;
     }
     public void GetDamage(float damage)
     {
@@ -22,11 +26,10 @@ public class CastleHealth : MonoBehaviour
         if (onDamage != null) onDamage(health/100);
         if(health <= Mathf.Epsilon)
         {
-            isAlive = false;
-            CasleDestroy();
+            onDestroy();
         }
     }
-    public void CasleDestroy()
+    public void CastleDestroy()
     {
         isAlive = false;
     }

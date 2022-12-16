@@ -86,7 +86,7 @@ public class BuildTowerGUI : MonoBehaviour
         int priceUpgrade4A = PricesForTowers.ARROW_4A;
         int priceUpgrade4B = PricesForTowers.ARROW_4B;
         int salePrice = (int)(PricesForTowers.ARROW_3 * 0.8f);
-        upgradeButtonsAdvanced.GetComponent<UpgradeBUttons>().SetPrices(priceUpgrade4A,priceUpgrade4B,salePrice);
+        upgradeButtonsAdvanced.GetComponent<UpgradeButtons>().SetPrices(priceUpgrade4A,priceUpgrade4B,salePrice);
     }
 
     void ShowSellButton(Vector3 canvasPos, Tower tower)
@@ -106,7 +106,7 @@ public class BuildTowerGUI : MonoBehaviour
         int sellPrice = 0;
         if(state == TowerState.LEVEL_4A) sellPrice = (int)(PricesForTowers.ARROW_4A * 0.8f);
         if(state == TowerState.LEVEL_4A) sellPrice = (int)(PricesForTowers.ARROW_4B * 0.8f);
-        upgradeButtonsBasic.GetComponent<UpgradeBUttons>().SetPrices(sellPrice);
+        upgradeButtonsBasic.GetComponent<UpgradeButtons>().SetPrices(sellPrice);
 
     }
     void SetArrowPrice(TowerState state)
@@ -124,7 +124,7 @@ public class BuildTowerGUI : MonoBehaviour
             priceForUpgrades = PricesForTowers.ARROW_3;
             priceForSale =(int)(PricesForTowers.ARROW_2 * 0.8f) ;
         }
-        upgradeButtonsBasic.GetComponent<UpgradeBUttons>().SetPrices(priceForUpgrades, priceForSale);
+        upgradeButtonsBasic.GetComponent<UpgradeButtons>().SetPrices(priceForUpgrades, priceForSale);
     } 
     public IEnumerator DisableUpgradeButtons()
     {
