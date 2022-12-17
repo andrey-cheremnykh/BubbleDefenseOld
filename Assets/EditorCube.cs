@@ -33,7 +33,7 @@ public class EditorCube : MonoBehaviour
         TextMesh text = GetComponentInChildren<TextMesh>();
         float snapX = Mathf.RoundToInt(transform.position.x / gridScale);
         float snapZ = Mathf.RoundToInt(transform.position.z / gridScale);
-        text.text = "(" + snapX + " , " + snapZ + ")";
+        if(text != null)text.text = "(" + snapX + " , " + snapZ + ")";
         gameObject.name = "Cube (" + snapX + " , " + snapZ + ")";
     }
 }
