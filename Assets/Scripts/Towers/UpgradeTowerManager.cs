@@ -44,6 +44,7 @@ public class UpgradeTowerManager : MonoBehaviour
     public void DestroySelectedTower()
     {
         StartCoroutine(selectedTower.DestroyTower());
+        FindObjectOfType<BuildTowerManager>().DecreaseTowerCount();
         DisableAllButtons();
     }
 

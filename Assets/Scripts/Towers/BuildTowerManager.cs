@@ -11,6 +11,8 @@ public class BuildTowerManager : MonoBehaviour
     BuildTowerGUI towerGui;
     Waypoint lastPressedPoint;
     GameObject selectVFX;
+    int currentTowerCount;
+    int maxToerCount = 5;
     EnemySpawner enemySpawner;
     MoneyManager mm;
     private void Start()
@@ -18,8 +20,21 @@ public class BuildTowerManager : MonoBehaviour
         towerGui = FindObjectOfType<BuildTowerGUI>();
         selectVFX = GetComponentInChildren<ParticleSystem>().gameObject;
         mm = FindObjectOfType<MoneyManager>();
-
+        SetMAxTowerCount();
         selectVFX.SetActive(false);
+    }
+    void SetMAxTowerCount()
+    {
+        int countLevel = PlayerPrefs.GetInt("tower-limit");
+        if (countLevel == 1) maxToerCount = 8;
+        if (countLevel == 2) maxToerCount = 12;
+        if (countLevel == 3) maxToerCount = 16;
+        if (countLevel == 4) maxToerCount = 20;
+        print($"Max Towers: {maxToerCount}");
+    }
+    public void DecreaseTowerCount()
+    {
+        currentTowerCount--;
     }
 
     public void BuildTower(Waypoint waypoint)
@@ -64,10 +79,12 @@ public class BuildTowerManager : MonoBehaviour
     }
     public void SpawnArcherTower()
     {
+        if (currentTowerCount >= maxToerCount) return;
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
         if (mm.SpendMoney(PricesForTowers.ARROW_1) == false) return;
+        currentTowerCount++;
 
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
@@ -77,10 +94,12 @@ public class BuildTowerManager : MonoBehaviour
     }
     public void SpawnCannonTower()
     {
+        if (currentTowerCount >= maxToerCount) return;
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
         if (mm.SpendMoney(PricesForTowers.CANNON_1) == false) return;
+        currentTowerCount++;
 
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(CannonTowerPrefab, buildPoint, Quaternion.identity);
@@ -88,11 +107,12 @@ public class BuildTowerManager : MonoBehaviour
         DisableButtons();
     }public void SpawnMagicTower()
     {
+        if (currentTowerCount >= maxToerCount) return;
         if (towerGui.stateBuild == ButtonState.ACTIVE) return;
         if (lastPressedPoint.buildState != BuildState.EMPTY) return;
         if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
         if (mm.SpendMoney(PricesForTowers.MAGIC_1) == false) return;
-
+        currentTowerCount++;
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;

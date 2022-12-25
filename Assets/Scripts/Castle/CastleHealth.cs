@@ -18,6 +18,16 @@ public class CastleHealth : MonoBehaviour
         health = maxHealth;
         if (onDamage != null) onDamage(health / 100);
         onDestroy += CastleDestroy;
+        SetmaxHP();
+    }
+    void SetmaxHP()
+    {
+        int level = PlayerPrefs.GetInt("strength");
+        if (level == 1) maxHealth = 200;
+        if (level == 2) maxHealth = 400;
+        if (level == 3) maxHealth = 800;
+        if (level == 4) maxHealth = 1200;
+        if (level == 5) maxHealth = 2300;
     }
     public void GetDamage(float damage)
     {
