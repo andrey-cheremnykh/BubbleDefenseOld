@@ -15,7 +15,7 @@ public class LevelButton : MonoBehaviour
     public void SetButtonParams(int buttonIndex)
     {
         buttonText = GetComponentInChildren<TMP_Text>();
-        int levelsCompleted = PlayerPrefs.GetInt("levels-open");
+        int levelsCompleted = PlayerPrefs.GetInt("levels-open") + 1;
         levelIndex = buttonIndex;
         buttonText.text = $"Level {levelIndex}";
         GetComponent<Button>().onClick.AddListener(LoadLevel    );

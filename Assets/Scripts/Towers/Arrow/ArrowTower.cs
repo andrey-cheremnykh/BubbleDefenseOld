@@ -25,7 +25,6 @@ public class ArrowTower : Tower
     }
     protected override IEnumerator BuildTower()
     {
-        Refund();
         archers[0].SetActive(false);
        yield return  StartCoroutine(base.BuildTower());
         archers[0].SetActive(true);
@@ -43,6 +42,7 @@ public class ArrowTower : Tower
     }
     public override IEnumerator DestroyTower()
     {
+        Refund();
         archers[0].SetActive(false);
         archers[1].SetActive(false);
         yield return StartCoroutine(base.DestroyTower());
@@ -73,18 +73,6 @@ public class ArrowTower : Tower
         }
         isReloaded = true;
     }
-    public override IEnumerator UpgradeToLevel4B()
-    {
-        MoneyManager mm = FindObjectOfType<MoneyManager>();
-        if (mm.SpendMoney(PricesForTowers.ARROW_4B) == false) yield break;
-        archers[0].SetActive(false);
-        yield return StartCoroutine(base.UpgradeToLevel4B());
-        archers[0].SetActive(false);
-        archers[1].SetActive(false);
-        archers[0].transform.localPosition = new Vector3(2.9f, 6.7f, 1);
-        archers[0].transform.localPosition = new Vector3(-2.9f, 6.7f, 1);
-
-    }
     IEnumerator ShootMassive()
     {
         isReloaded = false;
@@ -97,6 +85,18 @@ public class ArrowTower : Tower
         }
         yield return new WaitForSeconds(1 / firerate);
         isReloaded = true;
+    }
+    public override IEnumerator UpgradeToLevel4B()
+    {
+        MoneyManager mm = FindObjectOfType<MoneyManager>();
+        if (mm.SpendMoney(PricesForTowers.ARROW_4B) == false) yield break;
+        archers[0].SetActive(false);
+        yield return StartCoroutine(base.UpgradeToLevel4B());
+        archers[0].SetActive(false);
+        archers[1].SetActive(false);
+        archers[0].transform.localPosition = new Vector3(2.9f, 6.7f, 1);
+        archers[0].transform.localPosition = new Vector3(-2.9f, 6.7f, 1);
+
     }
     public override IEnumerator UpgradeToLevel4A()
     {

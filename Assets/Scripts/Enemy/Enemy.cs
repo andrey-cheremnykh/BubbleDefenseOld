@@ -108,5 +108,11 @@ public class Enemy : MonoBehaviour
         LookForward();
     }
 
-    
+    public IEnumerator SlowEnemy(float slowness, float duration)
+    {
+        float percent = 1 - slowness;
+        enemySpeed *= percent;
+        yield return new WaitForSeconds(duration);
+        enemySpeed /= percent;
+    }
 }

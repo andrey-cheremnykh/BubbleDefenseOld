@@ -67,6 +67,32 @@ public class BuildTowerManager : MonoBehaviour
 
 
     }
+    public void SpawnArcherTower()
+    {
+
+        bool canBuild = CheckSpawnTower(ArcherTowerPrefab.GetComponent<Tower>());
+        if (canBuild)
+        {
+            BuildTower(ArcherTowerPrefab);
+        }
+    }
+    public void SpawnCannonTower()
+    {
+        bool canBuild = CheckSpawnTower(CannonTowerPrefab.GetComponent<Tower>());
+        if (canBuild)
+        {
+            BuildTower(CannonTowerPrefab);
+        }
+
+    }
+    public void SpawnMagicTower()
+    {
+        bool canBuild = CheckSpawnTower(MagicTowerPrefab.GetComponent<Tower>());
+        if (canBuild)
+        {
+            BuildTower(MagicTowerPrefab);
+        }
+    } 
 
     bool CheckBuildable(Waypoint waypoint)
     {
@@ -77,45 +103,33 @@ public class BuildTowerManager : MonoBehaviour
 
         return isPathFound;
     }
-    public void SpawnArcherTower()
+    bool CheckSpawnTower(Tower buildingTower)
     {
-        if (currentTowerCount >= maxToerCount) return;
-        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
-        if (lastPressedPoint.buildState != BuildState.EMPTY) return;
-        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
-        if (mm.SpendMoney(PricesForTowers.ARROW_1) == false) return;
-        currentTowerCount++;
-
-        Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
-        GameObject cloneTower = Instantiate(ArcherTowerPrefab, buildPoint, Quaternion.identity);
-        lastPressedPoint.buildState = BuildState.TOWER_BUILT;
-        towerGui.CreateTowerSlider(cloneTower.transform);
-        DisableButtons();
+        if (currentTowerCount >= maxToerCount) return false;
+        if (towerGui.stateBuild == ButtonState.ACTIVE) return false;
+        if (lastPressedPoint.buildState != BuildState.EMPTY) return false;
+        if (enemySpawner.state != SpawnState.NON_SPAWNING) return false;
+        if(buildingTower is ArrowTower) 
+        {
+            if (mm.SpendMoney(PricesForTowers.ARROW_1) == false) return false;
+        }
+        else if(buildingTower is CannonTower) 
+        {
+            if (mm.SpendMoney(PricesForTowers.CANNON_1) == false) return false;
+        }
+        else if(buildingTower is MagicTower) 
+        {
+            if (mm.SpendMoney(PricesForTowers.MAGIC_1) == false) return false;
+        }
+        return true;  
     }
-    public void SpawnCannonTower()
+    void BuildTower(GameObject towerPrefab)
     {
-        if (currentTowerCount >= maxToerCount) return;
-        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
-        if (lastPressedPoint.buildState != BuildState.EMPTY) return;
-        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
-        if (mm.SpendMoney(PricesForTowers.CANNON_1) == false) return;
-        currentTowerCount++;
-
-        Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
-        GameObject cloneTower = Instantiate(CannonTowerPrefab, buildPoint, Quaternion.identity);
-        lastPressedPoint.buildState = BuildState.TOWER_BUILT;
-        DisableButtons();
-    }public void SpawnMagicTower()
-    {
-        if (currentTowerCount >= maxToerCount) return;
-        if (towerGui.stateBuild == ButtonState.ACTIVE) return;
-        if (lastPressedPoint.buildState != BuildState.EMPTY) return;
-        if (enemySpawner.state != SpawnState.NON_SPAWNING) return;
-        if (mm.SpendMoney(PricesForTowers.MAGIC_1) == false) return;
         currentTowerCount++;
         Vector3 buildPoint = lastPressedPoint.transform.position + new Vector3(0,6,0);
         GameObject cloneTower = Instantiate(MagicTowerPrefab, buildPoint, Quaternion.identity);
         lastPressedPoint.buildState = BuildState.TOWER_BUILT;
         DisableButtons();
-    } 
+
+    }
 }

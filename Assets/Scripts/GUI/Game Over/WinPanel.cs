@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
 
 public class WinPanel : MonoBehaviour
@@ -14,5 +13,12 @@ public class WinPanel : MonoBehaviour
         int gemsEarned = spawn.GetWaveCount();
         gemText.text = "" + gemsEarned;
 
+    }
+    void CheckLevelComplete()
+    {
+        int levelComplete = PlayerPrefs.GetInt("levels-open ");
+        int levelIndex = SceneManager.GetActiveScene().buildIndex;
+        if (levelComplete >= levelIndex) return;
+        PlayerPrefs.SetInt("levels-open", levelComplete + 1); 
     }
 }
