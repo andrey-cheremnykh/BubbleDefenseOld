@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
     GameObject enemy;
     float damageArrow = 10;
     float timer = 0;
-    float speed = 0.5f;
+    float speed = 4;
     Vector3 startPos;
     
     

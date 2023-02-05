@@ -23,6 +23,13 @@ public class ArrowTower : Tower
         archers[1].SetActive(false);
         base.Start();
     }
+    void SetLevelParams(int level)
+    {
+        level--;
+        attackRadius = TowerParams.ARROW_TOWER_RADIUS[level];
+        damagearrow = TowerParams.ARROW_TOWER_DAMEGE[level];
+
+    }
     protected override IEnumerator BuildTower()
     {
         archers[0].SetActive(false);
@@ -96,7 +103,7 @@ public class ArrowTower : Tower
         archers[1].SetActive(false);
         archers[0].transform.localPosition = new Vector3(2.9f, 6.7f, 1);
         archers[0].transform.localPosition = new Vector3(-2.9f, 6.7f, 1);
-
+        SetLevelParams(5);
     }
     public override IEnumerator UpgradeToLevel4A()
     {
@@ -104,6 +111,7 @@ public class ArrowTower : Tower
         if (mm.SpendMoney(PricesForTowers.ARROW_4A) == false) yield break;
         archers[0].SetActive(false);
         yield return StartCoroutine(base.UpgradeToLevel4A());
+        SetLevelParams(4);
     }
     public override IEnumerator UpgradeToLevel3()
     {
@@ -112,6 +120,7 @@ public class ArrowTower : Tower
         archers[0].SetActive(true);
         yield return StartCoroutine( base.UpgradeToLevel3());
         archers[1].SetActive(false);
+        SetLevelParams(3);
     } public override IEnumerator UpgradeToLevel2()
     {
         MoneyManager mm = FindObjectOfType<MoneyManager>();
@@ -119,12 +128,8 @@ public class ArrowTower : Tower
         archers[0].SetActive (true);
         yield return StartCoroutine( base.UpgradeToLevel2());
         archers[1].SetActive(false);
+        SetLevelParams(2);
     }
 
-    void ArcherEnemyLook(GameObject archer)
-    {
-        archer.transform.LookAt(enemy.transform.position);
-        float degreeY = archer.transform.rotation.eulerAngles.y;
-        archer.transform.rotation = Quaternion.Euler(0, degreeY, 0);
-    }
+    
 }

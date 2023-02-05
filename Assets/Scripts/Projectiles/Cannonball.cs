@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour
 {
+    [SerializeField] int level = 1;
     [SerializeField] float damage = 20;
     [SerializeField] float damageRadius = 10;
     Vector3 dest;
@@ -12,6 +13,10 @@ public class Cannonball : MonoBehaviour
     float timer = 0;
     public void LaunchCannonball(Vector3 destination)
     {
+        level--;
+        damageRadius = TowerParams.CANN0N_EXPLOSION_RADIUS[level];
+        damage = TowerParams.CANNON_PROJESCTILE_DAMEGE[level];
+        damage =
         timer = 0;
         startPos = transform.position;
         Rigidbody rb = GetComponent<Rigidbody>();

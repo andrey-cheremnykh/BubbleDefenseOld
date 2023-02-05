@@ -53,7 +53,9 @@ public class CannonTower : Tower
         MoneyManager mm = FindObjectOfType<MoneyManager>();
         if (mm.SpendMoney(PricesForTowers.CANNON_4B) == false) yield break;
         yield return StartCoroutine(base.UpgradeToLevel4B());
-
+        top.SetActive(true);
+        top.GetComponent<Top>().SetTop(5);
+        attackRadius = TowerParams.CANNON_TOWER_RADIUS[4];
     }
     public override IEnumerator UpgradeToLevel4A()
     {

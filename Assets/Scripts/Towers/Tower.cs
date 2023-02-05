@@ -13,7 +13,7 @@ public enum TowerState
     LEVEL_4B
 }
 
-public class Tower : MonoBehaviour
+public abstract class Tower : MonoBehaviour
 {
     public TowerState state = TowerState.BUILDING;
     Waypoint builtWaypoint;
