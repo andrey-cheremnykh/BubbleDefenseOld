@@ -815,7 +815,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0eeedb244bd4347d18ccecc2513decd3, type: 2}
+  - {fileID: 2100000, guid: 1ebe446314fb8f74690384c8a317f156, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2291,6 +2291,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpeed: 1
+  baseMat: {fileID: 2100000, guid: 1ebe446314fb8f74690384c8a317f156, type: 2}
+  frozenMat: {fileID: 2100000, guid: 822dbe44aff646e45ab92a124453bb95, type: 2}
+  deathMat: {fileID: 2100000, guid: 8f82d5d45e3d40b4bb9587aab7e06846, type: 2}
 --- !u!114 &8541783925162602990
 MonoBehaviour:
   m_ObjectHideFlags: 0

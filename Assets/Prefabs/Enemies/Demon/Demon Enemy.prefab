@@ -46,11 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpeed: 1
+  baseMat: {fileID: 2100000, guid: e82b6a425f4a8954ba9eeaf3b59340ed, type: 2}
+  frozenMat: {fileID: 2100000, guid: d1c515d6760361f4b9f4ef0de2c90f94, type: 2}
+  deathMat: {fileID: 2100000, guid: 0523f5deb03faf946b4846673db55c09, type: 2}
 --- !u!1001 &8800761906592564967
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 8800761907113466315}
     m_Modifications:
     - target: {fileID: 1134928459341274, guid: 57f23b8775581094b826dd293890e4f6, type: 3}
@@ -117,7 +121,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 137772599384167402, guid: 57f23b8775581094b826dd293890e4f6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e82b6a425f4a8954ba9eeaf3b59340ed, type: 2}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 57f23b8775581094b826dd293890e4f6, type: 3}
 --- !u!4 &8803628711117698737 stripped
 Transform:

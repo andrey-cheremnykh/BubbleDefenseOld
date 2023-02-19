@@ -14,6 +14,10 @@ public class Enemy : MonoBehaviour
 
     Vector3 start, end, offset;
     bool isOnCastle;
+    [SerializeField] Material baseMat;
+    [SerializeField] Material frozenMat;
+    [SerializeField] Material deathMat;
+    SkinnedMeshRenderer skinnedMesh;
     public float GetPassedDist()
     {
         float dist = indexWaypoint + timer;
@@ -22,7 +26,13 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
         health = GetComponent<EnemyHealth>();
+        health.onDeath += Death;
+    }
+    void Death()
+    {
+        skinnedMesh.material = deathMat;
     }
 
     // Update is called once per frame
@@ -110,9 +120,12 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator SlowEnemy(float slowness, float duration)
     {
+        if (health.isAlive == false) yield break;
+        skinnedMesh.material = frozenMat;
         float percent = 1 - slowness;
         enemySpeed *= percent;
         yield return new WaitForSeconds(duration);
+        skinnedMesh.material = baseMat;
         enemySpeed /= percent;
     }
 }

@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
     float timer = 0;
     public SpawnState state = SpawnState.NON_SPAWNING;
     public event Action onWin;
+    [SerializeField] MeshRenderer portalMesh;
     public int GetWaveCount()
     {
         return waveCount;
@@ -30,6 +31,8 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         pathfinder = FindObjectOfType<Pathfinder>();
+        spawnBar = FindObjectOfType<WaveSpawnBar>();
+        portalMesh.material.SetFloat("visibility", 0);
     }
 
     // Update is called once per frame
@@ -53,10 +56,37 @@ public class EnemySpawner : MonoBehaviour
         }
 
     }
-
+    IEnumerator IncreasePortalVis(bool isOn)
+    {
+        if (isOn == true)
+        {
+            float visibility = 0;
+            {
+                while (visibility < 1)
+                {
+                    visibility += Time.deltaTime;
+                    portalMesh.material.SetFloat("visibility", visibility);
+                    yield return null;
+                }
+            }
+        }
+        else
+        {
+            float visibility = 1;
+            {
+                while (visibility >  0)
+                {
+                    visibility -= Time.deltaTime;
+                    portalMesh.material.SetFloat("visibility", visibility);
+                    yield return null;
+                }
+                visibility = 0; 
+            }
+        }
+    }
     public IEnumerator SpawnNewWave()
     {
-        if (state != SpawnState.NON_SPAWNING) yield break;
+        yield return StartCoroutine(IncreasePortalVis(true));
         timer = 0;
         state = SpawnState.SPAWNING;
         spawnBar.SetText("WAve:" + (waveCount + 1));

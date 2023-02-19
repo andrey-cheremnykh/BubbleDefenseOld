@@ -25,7 +25,7 @@ public class MagicTower : Tower
     void Update()
     {
         if (state == TowerState.BUILDING || state == TowerState.DESTROYING) return;
-        GameObject enemy = FindEnemyToShoot();
+        GameObject enemy = FindObjectOfType<Enemy>().gameObject;
         if (enemy == null) return;
 
 
